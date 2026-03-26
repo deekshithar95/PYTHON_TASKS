@@ -1,0 +1,4 @@
+John Doe, 30, admin
+Jane Smith, 25, user
+Alice Johnson, 28, editor
+Bob Brown, 35, moderator
