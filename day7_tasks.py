@@ -226,54 +226,137 @@ Filtered data
 Total fees & salary
 Use at least 3 functional programming concepts together
 '''
+from abc import ABC, abstractmethod
+from functools import reduce
+
+# -------------------------------
+# Abstract Base Class
+# -------------------------------
+class AbstractUser(ABC):
+    def __init__(self, name, id):
+        self.name = name
+        self.id = id
+
+    @abstractmethod
+    def get_details(self):
+        pass
+
+
+# -------------------------------
+# Child Classes
+# -------------------------------
+class Student(AbstractUser):
+    def __init__(self, name, id, dept, fees):
+        super().__init__(name, id)
+        self.dept = dept
+        self.fees = fees
+
+    def get_details(self):
+        return f"Student: {self.name}, ID: {self.id}, Dept: {self.dept}, Fees: {self.fees}"
+
+
+class Faculty(AbstractUser):
+    def __init__(self, name, id, salary):
+        super().__init__(name, id)
+        self.salary = salary
+
+    def get_details(self):
+        return f"Faculty: {self.name}, ID: {self.id}, Salary: {self.salary}"
+
+
+class TempFaculty(Faculty):
+    def __init__(self, name, id, salary, duration):
+        super().__init__(name, id, salary)
+        self.duration = duration
+
+    def get_details(self):
+        return f"TempFaculty: {self.name}, ID: {self.id}, Salary: {self.salary}, Duration: {self.duration}"
+
+
+# -------------------------------
+# Higher Order Function
+# -------------------------------
+def process_users(users, func):
+    return list(func(users))
+
+
+# -------------------------------
+# Data
+# -------------------------------
 students = [
     Student("Alice", 101, "CS", 50000),
-    Student("Bob", 102, "Math", 80000),
-    Student("Charlie", 103, "Physics", 90000),
-    Student("David", 104, "Chemistry", 45000),
-    Student("Eve", 105, "Biology", 55000),
-    Student("Frank", 106, "History", 30000),
-    Student("Grace", 107, "Literature", 60000)
+    Student("Bob", 102, "Math", 60000),
+    Student("Charlie", 103, "Physics", 45000),
+    Student("Diana", 104, "Biology", 70000)
 ]
+
 faculty = [
-    Faculty("Dr. Smith", 1, 50000),
-    Faculty("Dr. Johnson", 2, 60000),
-    Faculty("Dr. Brown", 3, 40000),
-    Faculty("Dr. Green", 4, 70000),
-    Faculty("Dr. White", 5, 35000),
-    Faculty("Dr. Black", 6, 45000),
-    Faculty("Dr. Gray", 7, 55000)
+    Faculty("Dr. Smith", 201, 25000),
+    Faculty("Dr. Jones", 202, 40000),
+    Faculty("Dr. Brown", 203, 35000),
+    Faculty("Dr. Taylor", 204, 60000)
 ]
-# Print all details
-print("Student Details:")   
-for student in students:
-    print(student.get_details())
-print("\nFaculty Details:")
-for member in faculty:
-    print(member.get_details())
-# Sort students by fees and faculty by salary
+
+# -------------------------------
+# 1. Print All Details
+# -------------------------------
+print("=== All Students ===")
+for s in students:
+    print(s.get_details())
+
+print("\n=== All Faculty ===")
+for f in faculty:
+    print(f.get_details())
+
+
+# -------------------------------
+# 2. Sorted Data
+# -------------------------------
 students.sort(key=lambda s: s.fees)
 faculty.sort(key=lambda f: f.salary)
-print("\nSorted Students by Fees:")
-for student in students:
-    print(student.get_details())
-print("\nSorted Faculty by Salary:")
-for member in faculty:
-    print(member.get_details())
-# Filter students with fees > 50000 and faculty with salary > 30000
+
+print("\n=== Students Sorted by Fees ===")
+for s in students:
+    print(s.get_details())
+
+print("\n=== Faculty Sorted by Salary ===")
+for f in faculty:
+    print(f.get_details())
+
+
+# -------------------------------
+# 3. Filtered Data
+# -------------------------------
 high_fee_students = list(filter(lambda s: s.fees > 50000, students))
 high_salary_faculty = list(filter(lambda f: f.salary > 30000, faculty))
-print("\nStudents with Fees > 50000:")
-for student in high_fee_students:
-    print(student.get_details())
-print("\nFaculty with Salary > 30000:")
-for member in high_salary_faculty:
-    print(member.get_details())
-# Calculate total fees and salary using reduce
+
+print("\n=== Students with Fees > 50000 ===")
+for s in high_fee_students:
+    print(s.get_details())
+
+print("\n=== Faculty with Salary > 30000 ===")
+for f in high_salary_faculty:
+    print(f.get_details())
+
+
+# -------------------------------
+# 4. Aggregated Data (reduce)
+# -------------------------------
 total_fees = reduce(lambda acc, s: acc + s.fees, students, 0)
 total_salary = reduce(lambda acc, f: acc + f.salary, faculty, 0)
-print("\nTotal Fees Collected:", total_fees)
-print("Total Salary of Faculty:", total_salary)
+
+print("\n=== Totals ===")
+print("Total Fees Collected:", total_fees)
+print("Total Faculty Salary:", total_salary)
+
+
+# -------------------------------
+# 5. Higher Order Function Usage
+# -------------------------------
+names = process_users(students, lambda users: map(lambda s: s.name, users))
+print("\n=== Student Names (via process_users + map) ===")
+print(names)
+
 
 
 
