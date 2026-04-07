@@ -194,3 +194,4 @@ print(a ^ b)  #output: 5
 # ----------------
 #XOR(^)  =  101 (Binary Value)
 #        =   5  (Decimal Value)
+
